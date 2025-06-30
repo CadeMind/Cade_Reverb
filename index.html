@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CADEMIND: Reverb Timing Calculator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CADE: Reverb Timing Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
@@ -11,59 +11,375 @@
       --primary: #00ff41;
       --secondary: #008f11;
       --accent: #00ffff;
+      --warning: #ff6b35;
+      --danger: #ff073a;
+      --success: #39ff14;
       --bg-dark: #000000;
+      --bg-darker: #0a0a0a;
+      --bg-card: #0d1117;
       --text-primary: #00ff41;
+      --text-secondary: #4a9eff;
+      --text-muted: #7d8590;
+      --glass: rgba(0, 255, 65, 0.03);
       --glass-border: rgba(0, 255, 65, 0.1);
-      ...
     }
     body {
-      background: #000;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(ellipse at center, #001100, #000000);
       color: var(--text-primary);
-      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
+    }
+    body.light-theme {
+      background: #f5f5f5;
+      color: #000;
+    }
+    .header {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin: 0 0 20px 0;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
     }
     .glass-card {
       background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(20px);
       border: 1px solid var(--glass-border);
       border-radius: 24px;
       padding: 40px;
-      backdrop-filter: blur(20px);
-      ...
+      box-shadow: 0 8px 32px rgba(0,255,65,0.1), inset 0 1px 0 rgba(0,255,65,0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+    body.light-theme .glass-card {
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(0,0,0,0.1);
+      color: #000;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    input[type="number"], select {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    body.light-theme input[type="number"],
+    body.light-theme select {
+      background: #ffffff;
+      color: #000;
+      border-color: #ccc;
+    }
+    input.error {
+      border-color: var(--danger);
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      flex: 1;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #000;
+    }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+    }
+    #toggle-theme {
+      width: 40px;
+      padding: 0;
+    }
+    body.light-theme .btn-secondary {
+      background: #e8e8e8;
+      color: #000;
+      border-color: #ccc;
+    }
+    .results-table {
+      width: 100%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      animation: fadeIn 0.5s ease;
+    }
+    .results-table th, .results-table td {
+      border: 1px solid var(--glass-border);
+      padding: 8px 12px;
+      text-align: center;
+    }
+    .status-indicator {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000;
+      transition: opacity 0.3s;
+    }
+    body.light-theme .status-indicator {
+      background: #e0e0e0;
+      color: #000;
+    }
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
     }
     .floating-orb {
       position: absolute;
+      width: 300px;
+      height: 300px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(0,255,65,0.4) 0%, transparent 80%);
       filter: blur(80px);
+      mix-blend-mode: screen;
+      opacity: 1;
       animation: float 12s ease-in-out infinite;
-      ...
+    }
+    body.light-theme .floating-orb {
+      background: radial-gradient(circle, rgba(0,136,255,0.4) 0%, transparent 80%);
+    }
+    .orb-1 {
+      top: 10%;
+      left: 20%;
+    }
+    .orb-2 {
+      top: 40%;
+      left: 70%;
+      animation-duration: 14s;
+    }
+    .orb-3 {
+      top: 70%;
+      left: 30%;
+      animation-duration: 16s;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.1); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      opacity: 0.4;
+    }
+    @media (max-width: 600px) {
+      .glass-card { padding: 20px; }
+      .title { font-size: 1.6rem; }
     }
   </style>
 </head>
 <body>
-  <canvas class="bg-canvas" id="bg-canvas"></canvas>
-  <div class="floating-orb orb-1"></div>
-  <div class="floating-orb orb-2"></div>
-  <div class="glass-card">
-    <h1>CADEMIND: Reverb Timing Calculator</h1>
-    <input id="bpm" type="number" placeholder="Enter BPM (60-180)" />
-    <select id="genre">...</select>
-    <button id="calculate">Calculate</button>
-    <table id="results">...</table>
+  <div class="floating-elements">
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
   </div>
+  <canvas class="bg-canvas" id="bg-canvas"></canvas>
+  <header class="header">
+    <h1 class="title">CADE: Reverb Timing Calculator</h1>
+    <p class="subtitle">Genre-based Delay & Decay Matching Engine</p>
+  </header>
+  <div class="container">
+    <div class="glass-card">
+      <div class="input-group">
+        <label for="bpm">BPM</label>
+        <input id="bpm" type="number" placeholder="Enter BPM (60-180)" />
+      </div>
+      <div class="input-group">
+        <label for="genre">Genre</label>
+        <select id="genre">
+          <option value="" disabled selected>Select Genre</option>
+        </select>
+      </div>
+      <div class="button-group">
+        <button id="calculate" class="btn btn-primary">Calculate</button>
+        <button id="reset" class="btn btn-secondary">Reset</button>
+        <button id="toggle-theme" class="btn btn-secondary" title="Toggle theme">🌗</button>
+      </div>
+      <table id="results" class="results-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Pre-delay (ms)</th>
+            <th>Decay Time (s)</th>
+            <th>Reverb Type</th>
+            <th>Tips</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="status-indicator" class="status-indicator"></div>
 <script>
-  // three.js: вращающийся torus
+  // Basic three.js animated background
   const canvas = document.getElementById('bg-canvas');
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(...);
-  const renderer = new THREE.WebGLRenderer({canvas, alpha: true});
-  const torus = new THREE.Mesh(...);
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+  const material = new THREE.MeshBasicMaterial({color: 0x00ff41, wireframe: true});
+  const torus = new THREE.Mesh(geometry, material);
   scene.add(torus);
-  ...
-  async function loadPresets() {
-    const res = await fetch('https://raw.githubusercontent.com/CadeMind/Cade_Reverb/main/CADE_ReverbCalc/genre_presets.json');
-    ...
+  camera.position.z = 30;
+  function animate() {
+    requestAnimationFrame(animate);
+    torus.rotation.x += 0.005;
+    torus.rotation.y += 0.007;
+    renderer.render(scene, camera);
   }
+  animate();
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+  let presets = [];
+  const bpmInput = document.getElementById('bpm');
+  const genreSelect = document.getElementById('genre');
+  const status = document.getElementById('status-indicator');
+  const results = document.getElementById('results');
+  const tbody = results.querySelector('tbody');
+  const themeBtn = document.getElementById('toggle-theme');
+
+  async function loadPresets() {
+    try {
+      const res = await fetch('https://raw.githubusercontent.com/CadeMind/Cade_Reverb/main/CADE_ReverbCalc/genre_presets.json');
+      if (!res.ok) throw new Error('Failed to fetch presets');
+      presets = await res.json();
+      showStatus('Presets loaded', true);
+      getGenres();
+    } catch (e) {
+      showStatus('Preset load error', false);
+    }
+  }
+
+  function getGenres() {
+    const genreSet = Array.isArray(presets)
+      ? new Set(presets.map(p => p.genre))
+      : new Set(Object.keys(presets));
+    genreSelect.innerHTML = '<option disabled selected>Select Genre</option>';
+    genreSet.forEach(g => {
+      const opt = document.createElement('option');
+      opt.textContent = g;
+      opt.value = g;
+      genreSelect.appendChild(opt);
+    });
+  }
+  function showStatus(msg, ok=true){
+    status.textContent = (ok ? '✨ ' : '❌ ') + msg;
+    status.style.background = ok ? 'rgba(0,255,65,0.1)' : 'rgba(255,0,0,0.2)';
+    status.style.opacity = 1;
+    setTimeout(()=>status.style.opacity=0, 2000);
+  }
+  function findPreset(genre, bpm){
+    const gData = Array.isArray(presets)
+      ? presets.find(p => p.genre === genre)
+      : presets[genre];
+    if(!gData) return null;
+    const ranges = gData.bpm_ranges;
+    if(Array.isArray(ranges)) {
+      for(const entry of ranges){
+        const [l, h] = entry.range;
+        if(bpm >= l && bpm <= h) return entry;
+      }
+    } else {
+      for(const r in ranges){
+        const [l,h] = r.split('-').map(Number);
+        if(bpm>=l && bpm<=h) return ranges[r];
+      }
+    }
+    return null;
+  }
+  document.getElementById('calculate').addEventListener('click', ()=>{
+    const bpm = parseInt(bpmInput.value,10);
+    if(isNaN(bpm) || bpm<60 || bpm>180){
+      bpmInput.classList.add('error');
+      showStatus('Invalid BPM', false);
+      return;
+    }
+    bpmInput.classList.remove('error');
+    const preset = findPreset(genreSelect.value, bpm);
+    if(!preset){
+      showStatus(`No match for ${genreSelect.value} @ ${bpm} BPM`, false);
+      results.style.display='none';
+      return;
+    }
+    const tips = Array.isArray(preset.tips) ? preset.tips.join('<br>') : preset.tips;
+    tbody.innerHTML = `<tr><td>${preset.pre_delay}</td><td>${preset.decay}</td><td>${preset.type}</td><td>${tips}</td></tr>`;
+    results.style.display='none';
+    void results.offsetWidth;
+    results.style.display='table';
+    showStatus('Calculation Complete');
+  });
+  bpmInput.addEventListener('keydown', e => {
+    if(e.key === 'Enter') document.getElementById('calculate').click();
+  });
+  genreSelect.addEventListener('keydown', e => {
+    if(e.key === 'Enter') document.getElementById('calculate').click();
+  });
+  document.getElementById('reset').addEventListener('click', ()=>{
+    bpmInput.value='';
+    genreSelect.selectedIndex=0;
+    bpmInput.classList.remove('error');
+    results.style.display='none';
+  });
+
+  window.addEventListener('DOMContentLoaded', loadPresets);
+  function toggleTheme(){
+    const isLight = document.body.classList.toggle('light-theme');
+    torus.material.color.set(isLight ? 0x222222 : 0x00ff41);
+  }
+  document.addEventListener('dblclick', toggleTheme);
+  themeBtn.addEventListener('click', toggleTheme);
 </script>
 </body>
 </html>
