@@ -18,14 +18,20 @@
 :root {
   --primary: #00ff41;
   --bg: #000000;
+  --bg-card: rgba(0, 0, 0, 0.8);
   --text-primary: #00ff41;
+  --text-secondary: #ffffff;
   --accent: #00ffff;
+  --glass-border: rgba(0, 255, 65, 0.1);
 }
 body.light-theme {
   --primary: #00aaff;
   --bg: #f0f0f0;
+  --bg-card: rgba(255, 255, 255, 0.8);
   --text-primary: #111111;
+  --text-secondary: #333333;
   --accent: #00aaff;
+  --glass-border: rgba(0, 170, 255, 0.2);
 }
 body {
   margin:0;
@@ -46,14 +52,18 @@ body {
   max-width: 500px;
   margin: 5vh auto;
   padding: 20px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px var(--glass-border), inset 0 1px 0 var(--glass-border);
+  position: relative;
+  z-index: 1;
 }
 label {
   display:block;
   margin-top:10px;
+  color: var(--text-secondary);
 }
 input, select, button {
   width:100%;
@@ -70,17 +80,57 @@ button {
   background: var(--accent);
   color:#fff;
 }
-.results-table {
-  margin-top:20px;
-  word-break:break-word;
+.floating-elements {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
 }
-.results-table div {
-  margin-bottom:10px;
+.floating-orb {
+  position:absolute;
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  filter: blur(100px);
+  opacity:1;
+  mix-blend-mode: screen;
+  animation: float 12s ease-in-out infinite;
+}
+.orb-1 { top:10%; left:15%; }
+.orb-2 { bottom:20%; right:10%; animation-delay:4s; }
+.orb-3 { top:50%; left:60%; animation-delay:8s; }
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+.results-table {
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+  font-family:'JetBrainsMono', monospace;
+}
+.results-table th, .results-table td {
+  padding:8px 12px;
+  border-bottom:1px solid var(--glass-border);
+}
+.results-table th {
+  color: var(--accent);
+  text-align:left;
 }
 </style>
 </head>
 <body>
 <canvas id="bg"></canvas>
+<div class="floating-elements">
+  <div class="floating-orb orb-1"></div>
+  <div class="floating-orb orb-2"></div>
+  <div class="floating-orb orb-3"></div>
+</div>
 <div class="container">
   <h1>CADEMIND Reverb Calculator</h1>
   <label>BPM
@@ -90,8 +140,8 @@ button {
     <select id="genre"></select>
   </label>
   <button id="calc">Calculate</button>
-  <div class="results-table" id="results"></div>
-</div>
+  <table class="results-table" id="results"></table>
+  </div>
 <script src="https://raw.githubusercontent.com/mrdoob/three.js/r150/build/three.min.js"></script>
 <script>
 let presets = {};
@@ -118,15 +168,13 @@ function findPreset(genre,bpm){
   return presets[genre]?.bpm_ranges.find(({range})=>bpm>=range[0]&&bpm<=range[1])||null;
 }
 function displayResult(p){
-  const resDiv=document.getElementById('results');
+  const table=document.getElementById('results');
   if(!p){
-    resDiv.innerHTML = '<p>No preset found.</p>';
+    table.innerHTML='<tbody><tr><td colspan="4">No preset found.</td></tr></tbody>';
     return;
   }
-  resDiv.innerHTML = `<div><strong>Pre-delay:</strong> ${p.pre_delay}</div>
-  <div><strong>Decay Time:</strong> ${p.decay}</div>
-  <div><strong>Reverb Type:</strong> ${p.type}</div>
-  <div><strong>Tips:</strong><br>${p.tips.join('<br>')}</div>`;
+  table.innerHTML=`<thead><tr><th>Pre-delay</th><th>Decay Time</th><th>Reverb Type</th><th>Tips</th></tr></thead>
+  <tbody><tr><td>${p.pre_delay}</td><td>${p.decay}</td><td>${p.type}</td><td>${p.tips.join('<br>')}</td></tr></tbody>`;
 }
 function calculate(){
   const bpm = parseInt(document.getElementById('bpm').value,10);
@@ -147,10 +195,15 @@ function startBG(){
   const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
   const renderer=new THREE.WebGLRenderer({canvas,alpha:true});
   renderer.setSize(window.innerWidth,window.innerHeight);
-  const geometry=new THREE.TorusGeometry(10,3,16,100);
-  const material=new THREE.MeshBasicMaterial({color:0x00ffff,wireframe:true});
+  renderer.setPixelRatio(window.devicePixelRatio);
+  const geometry=new THREE.TorusKnotGeometry(10,3,128,32);
+  const material=new THREE.MeshPhongMaterial({color:0x00ffff,shininess:100});
   const torus=new THREE.Mesh(geometry,material);
   scene.add(torus);
+  const light=new THREE.PointLight(0xffffff,1);
+  light.position.set(10,10,10);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0x202020));
   camera.position.z=20;
   function animate(){
     requestAnimationFrame(animate);
