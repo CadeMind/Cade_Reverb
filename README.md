@@ -5,7 +5,7 @@
 ## Запуск
 
 ```bash
-python3 CADE_ReverbCalc/main.py
+python3 main.py
 ```
 
 Требуется Python 3.11+ с предустановленным модулем Tkinter.
