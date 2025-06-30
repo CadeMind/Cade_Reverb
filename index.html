@@ -6,6 +6,7 @@
   <title>CADE: Reverb Timing Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="presets.js"></script>
   <style>
     :root {
       --primary: #00ff41;
@@ -31,67 +32,7 @@
       overflow-x: hidden;
       position: relative;
     }
-    body.light-theme {
-      background: #f5f5f5;
-      color: #000;
-    }
-    .header {
-      text-align: center;
-      margin-top: 40px;
-    }
-    .title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin: 0;
-    }
-    .subtitle {
-      font-size: 1rem;
-      color: var(--text-secondary);
-      margin: 0 0 20px 0;
-    }
-    .container {
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-    }
-    .glass-card {
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 40px;
-      box-shadow: 0 8px 32px rgba(0,255,65,0.1), inset 0 1px 0 rgba(0,255,65,0.1);
-      width: 100%;
-      max-width: 600px;
-    }
-    body.light-theme .glass-card {
-      background: rgba(255,255,255,0.8);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(0,0,0,0.1);
-      color: #000;
-    }
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 20px;
-    }
-    label {
-      font-weight: 600;
-      margin-bottom: 5px;
-    }
-    input[type="number"], select {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--glass-border);
-      background: var(--bg-card);
-      color: var(--text-primary);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    body.light-theme input[type="number"],
-    body.light-theme select {
-      background: #ffffff;
-      color: #000;
-      border-color: #ccc;
-    }
+@@ -95,65 +96,75 @@
     input.error {
       border-color: var(--danger);
     }
@@ -167,7 +108,7 @@
       color: #000;
     }
     .floating-elements {
-@@ -188,129 +198,132 @@
+@@ -188,198 +199,202 @@
       left: 70%;
       animation-duration: 14s;
     }
@@ -278,14 +219,15 @@
 
   async function loadPresets() {
     try {
-      const res = await fetch('https://raw.githubusercontent.com/CadeMind/Cade_Reverb/main/CADE_ReverbCalc/genre_presets.json');
+      const res = await fetch('CADE_ReverbCalc/genre_presets.json');
       if (!res.ok) throw new Error('Failed to fetch presets');
       presets = await res.json();
       showStatus('Presets loaded', true);
-      getGenres();
     } catch (e) {
-      showStatus('Preset load error', false);
+      presets = window.PRESET_DATA || [];
+      showStatus('Loaded embedded presets', false);
     }
+    getGenres();
   }
 
   function getGenres() {
@@ -300,7 +242,16 @@
       genreSelect.appendChild(opt);
     });
   }
-@@ -327,59 +340,59 @@
+  function showStatus(msg, ok=true){
+    status.textContent = (ok ? '✨ ' : '❌ ') + msg;
+    status.style.background = ok ? 'rgba(0,255,65,0.1)' : 'rgba(255,0,0,0.2)';
+    status.style.opacity = 1;
+    setTimeout(()=>status.style.opacity=0, 2000);
+  }
+  function findPreset(genre, bpm){
+    const gData = Array.isArray(presets)
+      ? presets.find(p => p.genre === genre)
+      : presets[genre];
     if(!gData) return null;
     const ranges = gData.bpm_ranges;
     if(Array.isArray(ranges)) {
