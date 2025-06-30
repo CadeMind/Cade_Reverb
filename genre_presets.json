@@ -1,7 +1,11 @@
 {
   "Hip-Hop / Trap": {
-    "bpm_ranges": {
-      "60-64": {
+    "bpm_ranges": [
+      {
+        "range": [
+          60,
+          64
+        ],
         "pre_delay": "20–40 ms",
         "decay": "0.8–1.4 s",
         "type": "Plate / Chamber",
@@ -15,7 +19,11 @@
           "Адлибы: эффект reverse для интереса"
         ]
       },
-      "65-80": {
+      {
+        "range": [
+          65,
+          80
+        ],
         "pre_delay": "40–60 ms",
         "decay": "1.2–1.8 s",
         "type": "Hall",
@@ -29,7 +37,11 @@
           "Вокальные дубли: pitch-shift реверб"
         ]
       },
-      "81-100": {
+      {
+        "range": [
+          81,
+          100
+        ],
         "pre_delay": "60–80 ms",
         "decay": "1.6–2.2 s",
         "type": "Hall / Plate",
@@ -43,11 +55,15 @@
           "Бит: автоматизировать pre-delay"
         ]
       }
-    }
+    ]
   },
   "Pop": {
-    "bpm_ranges": {
-      "60-89": {
+    "bpm_ranges": [
+      {
+        "range": [
+          60,
+          89
+        ],
         "pre_delay": "40–60 ms",
         "decay": "1.2–1.8 s",
         "type": "Hall",
@@ -60,7 +76,11 @@
           "Оверхеды: контролировать room уровень"
         ]
       },
-      "90-120": {
+      {
+        "range": [
+          90,
+          120
+        ],
         "pre_delay": "30–50 ms",
         "decay": "1.0–1.6 s",
         "type": "Hall / Plate",
@@ -73,7 +93,11 @@
           "Электро-синты: plate с модуляцией"
         ]
       },
-      "121-140": {
+      {
+        "range": [
+          121,
+          140
+        ],
         "pre_delay": "10–30 ms",
         "decay": "0.8–1.2 s",
         "type": "Room",
@@ -86,7 +110,11 @@
           "Переходы: автоматизация длины хвоста"
         ]
       },
-      "141-160": {
+      {
+        "range": [
+          141,
+          160
+        ],
         "pre_delay": "5–15 ms",
         "decay": "0.6–1.0 s",
         "type": "Room",
@@ -99,11 +127,15 @@
           "Танцевальный вокал: применять delay в цепочке"
         ]
       }
-    }
+    ]
   },
   "Rock": {
-    "bpm_ranges": {
-      "80-110": {
+    "bpm_ranges": [
+      {
+        "range": [
+          80,
+          110
+        ],
         "pre_delay": "20–40 ms",
         "decay": "1.2–1.8 s",
         "type": "Plate / Room",
@@ -116,7 +148,11 @@
           "Бэк-вокал: небольшой hall для ширины"
         ]
       },
-      "111-140": {
+      {
+        "range": [
+          111,
+          140
+        ],
         "pre_delay": "10–30 ms",
         "decay": "0.8–1.4 s",
         "type": "Room",
@@ -129,11 +165,15 @@
           "Ритм-гитара: подмешивать spring"
         ]
       }
-    }
+    ]
   },
   "EDM": {
-    "bpm_ranges": {
-      "120-128": {
+    "bpm_ranges": [
+      {
+        "range": [
+          120,
+          128
+        ],
         "pre_delay": "10–30 ms",
         "decay": "1.0–1.6 s",
         "type": "Hall",
@@ -146,7 +186,11 @@
           "Билды: длинный hall с фильтром"
         ]
       },
-      "129-140": {
+      {
+        "range": [
+          129,
+          140
+        ],
         "pre_delay": "5–20 ms",
         "decay": "0.8–1.2 s",
         "type": "Plate",
@@ -159,7 +203,11 @@
           "Бэк-вокал: использовать реверс перед падением"
         ]
       },
-      "141-160": {
+      {
+        "range": [
+          141,
+          160
+        ],
         "pre_delay": "5–15 ms",
         "decay": "0.6–1.0 s",
         "type": "Room",
@@ -172,11 +220,15 @@
           "Синтовые удары: hall с sidechain"
         ]
       }
-    }
+    ]
   },
   "Jazz": {
-    "bpm_ranges": {
-      "60-90": {
+    "bpm_ranges": [
+      {
+        "range": [
+          60,
+          90
+        ],
         "pre_delay": "30–50 ms",
         "decay": "1.2–1.8 s",
         "type": "Chamber",
@@ -189,7 +241,11 @@
           "Блюзовые соло: chamber c лёгким хвостом"
         ]
       },
-      "91-140": {
+      {
+        "range": [
+          91,
+          140
+        ],
         "pre_delay": "20–40 ms",
         "decay": "1.0–1.6 s",
         "type": "Room / Chamber",
@@ -202,11 +258,15 @@
           "Снейр: небольшой room для живости"
         ]
       }
-    }
+    ]
   },
   "Reggae": {
-    "bpm_ranges": {
-      "70-90": {
+    "bpm_ranges": [
+      {
+        "range": [
+          70,
+          90
+        ],
         "pre_delay": "30–50 ms",
         "decay": "1.2–1.8 s",
         "type": "Room",
@@ -219,7 +279,11 @@
           "Перкуссионные ударные: короткий slapback"
         ]
       },
-      "91-120": {
+      {
+        "range": [
+          91,
+          120
+        ],
         "pre_delay": "20–40 ms",
         "decay": "0.8–1.4 s",
         "type": "Plate / Spring",
@@ -232,11 +296,15 @@
           "Вокал-дуб: экспериментировать с delay перед ревербом"
         ]
       }
-    }
+    ]
   },
   "Country": {
-    "bpm_ranges": {
-      "80-110": {
+    "bpm_ranges": [
+      {
+        "range": [
+          80,
+          110
+        ],
         "pre_delay": "20–40 ms",
         "decay": "1.0–1.6 s",
         "type": "Plate",
@@ -249,7 +317,11 @@
           "Бэк-вокал: умеренный hall для пространства"
         ]
       },
-      "111-140": {
+      {
+        "range": [
+          111,
+          140
+        ],
         "pre_delay": "10–30 ms",
         "decay": "0.8–1.2 s",
         "type": "Room",
@@ -262,11 +334,15 @@
           "Стринги: аккуратный hall"
         ]
       }
-    }
+    ]
   },
   "Metal": {
-    "bpm_ranges": {
-      "100-140": {
+    "bpm_ranges": [
+      {
+        "range": [
+          100,
+          140
+        ],
         "pre_delay": "10–30 ms",
         "decay": "0.8–1.4 s",
         "type": "Room / Plate",
@@ -279,7 +355,11 @@
           "Виртуозные соло: широкий hall"
         ]
       },
-      "141-180": {
+      {
+        "range": [
+          141,
+          180
+        ],
         "pre_delay": "5–15 ms",
         "decay": "0.6–1.0 s",
         "type": "Room",
@@ -292,11 +372,15 @@
           "Чистый вокал: крупный plate"
         ]
       }
-    }
+    ]
   },
   "Classical": {
-    "bpm_ranges": {
-      "60-90": {
+    "bpm_ranges": [
+      {
+        "range": [
+          60,
+          90
+        ],
         "pre_delay": "20–40 ms",
         "decay": "1.6–2.4 s",
         "type": "Hall / Chamber",
@@ -309,7 +393,11 @@
           "Соло-инструменты: chamber с ярким тоном"
         ]
       },
-      "91-120": {
+      {
+        "range": [
+          91,
+          120
+        ],
         "pre_delay": "10–30 ms",
         "decay": "1.2–2.0 s",
         "type": "Hall",
@@ -322,6 +410,231 @@
           "Медные духовые: тёплый hall"
         ]
       }
-    }
+    ]
+  },
+  "Tech House": {
+    "bpm_ranges": [
+      {
+        "range": [
+          120,
+          128
+        ],
+        "pre_delay": "10–20 ms",
+        "decay": "0.8–1.2 s",
+        "type": "Hall / Plate",
+        "tips": [
+          "Groove-басы: держать сухими",
+          "Снейры: короткий plate для ритма",
+          "Клэпы: умеренный hall для ширины",
+          "Lead synth: насыщенный hall",
+          "FX переходы: автоматизировать decay",
+          "Перкуссия: лёгкий room"
+        ]
+      }
+    ]
+  },
+  "UK Garage": {
+    "bpm_ranges": [
+      {
+        "range": [
+          130,
+          138
+        ],
+        "pre_delay": "5–15 ms",
+        "decay": "0.6–1.0 s",
+        "type": "Room",
+        "tips": [
+          "Вокал: чёткий plate для upfront звучания",
+          "Шейкеры: минимальный room",
+          "Bass: без реверба для глубины",
+          "Drums: короткий hall для glue",
+          "Chops: автоматизировать pre-delay"
+        ]
+      }
+    ]
+  },
+  "Progressive House": {
+    "bpm_ranges": [
+      {
+        "range": [
+          126,
+          132
+        ],
+        "pre_delay": "15–25 ms",
+        "decay": "1.2–1.8 s",
+        "type": "Hall",
+        "tips": [
+          "Мелодические лиды: просторный hall",
+          "Ритм-гитары: short plate",
+          "Build-ups: увеличивать decay",
+          "Пэды: обширный hall с фильтром",
+          "Kick: почти без реверба",
+          "Claps: layering с коротким room"
+        ]
+      }
+    ]
+  },
+  "Trance": {
+    "bpm_ranges": [
+      {
+        "range": [
+          132,
+          140
+        ],
+        "pre_delay": "20–30 ms",
+        "decay": "1.6–2.4 s",
+        "type": "Hall / Plate",
+        "tips": [
+          "Пады: длинный hall для атмосферы",
+          "Lead: яркий plate",
+          "Kick/Bass: без реверба",
+          "Арпы: умеренный pre-delay",
+          "FX: длинные хвосты с фильтрацией",
+          "Вокал: плотный hall"
+        ]
+      }
+    ]
+  },
+  "Liquid DnB": {
+    "bpm_ranges": [
+      {
+        "range": [
+          170,
+          176
+        ],
+        "pre_delay": "10–20 ms",
+        "decay": "1.2–1.8 s",
+        "type": "Hall",
+        "tips": [
+          "Атмосферные вокалы: широкий hall",
+          "Drums: короткий room",
+          "Bassline: практически dry",
+          "Пэды: shimmer hall",
+          "FX sweeps: automate decay"
+        ]
+      }
+    ]
+  },
+  "Minimal": {
+    "bpm_ranges": [
+      {
+        "range": [
+          118,
+          124
+        ],
+        "pre_delay": "5–10 ms",
+        "decay": "0.6–1.0 s",
+        "type": "Room",
+        "tips": [
+          "Перкуссия: компактный room",
+          "Клики и блики: короткий plate",
+          "Бас: почти dry",
+          "Atmosphere: лёгкий hall на бэкграунде",
+          "FX: экспериментировать с pre-delay"
+        ]
+      }
+    ]
+  },
+  "Industrial Techno": {
+    "bpm_ranges": [
+      {
+        "range": [
+          130,
+          140
+        ],
+        "pre_delay": "15–25 ms",
+        "decay": "1.8–2.5 s",
+        "type": "Hall / Chamber",
+        "tips": [
+          "Шумовые текстуры: длинный hall",
+          "Кик: сухой для мощи",
+          "Снейры: металлический plate",
+          "Перкуссия: gated reverb",
+          "Атмосфера: layering hall и room"
+        ]
+      }
+    ]
+  },
+  "Psytrance": {
+    "bpm_ranges": [
+      {
+        "range": [
+          138,
+          148
+        ],
+        "pre_delay": "10–20 ms",
+        "decay": "1.4–1.8 s",
+        "type": "Hall / Plate",
+        "tips": [
+          "FX: длинные хвосты с автодаккингом",
+          "Kick/Bass: сухие для драйва",
+          "Acid-линии: short plate",
+          "Вокалы: реверс + hall",
+          "Арпы: automate decay",
+          "Перкуссия: экспериментировать с панорамой"
+        ]
+      }
+    ]
+  },
+  "Chillwave / Synthwave": {
+    "bpm_ranges": [
+      {
+        "range": [
+          80,
+          100
+        ],
+        "pre_delay": "30–40 ms",
+        "decay": "2.0–3.0 s",
+        "type": "Hall / Plate",
+        "tips": [
+          "Синт-пэды: огромный hall",
+          "Барабаны: gated reverb для ретро",
+          "Вокал: плотный plate",
+          "Гитары: chorus + hall",
+          "FX: reverse reverb",
+          "Snare: характерный gated эффект"
+        ]
+      }
+    ]
+  },
+  "Dancehall": {
+    "bpm_ranges": [
+      {
+        "range": [
+          90,
+          100
+        ],
+        "pre_delay": "20–30 ms",
+        "decay": "1.0–1.6 s",
+        "type": "Room / Hall",
+        "tips": [
+          "Вокал: насыщенный hall",
+          "Drums: короткий room",
+          "Гитары: легкий plate",
+          "Перкуссия: echo + hall",
+          "FX stabs: automate pre-delay"
+        ]
+      }
+    ]
+  },
+  "Afro House": {
+    "bpm_ranges": [
+      {
+        "range": [
+          118,
+          125
+        ],
+        "pre_delay": "15–25 ms",
+        "decay": "1.2–1.8 s",
+        "type": "Hall",
+        "tips": [
+          "Percussion: spacious hall",
+          "Vocals: plate with warmth",
+          "Drums: keep tight room",
+          "Synths: automate decay",
+          "FX: layered hall and plate"
+        ]
+      }
+    ]
   }
 }
