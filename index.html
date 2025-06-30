@@ -117,10 +117,16 @@
       color: var(--text-primary);
       border: 1px solid var(--glass-border);
     }
-    #toggle-theme {
-      width: 40px;
-      padding: 0;
+    .theme-toggle-icon {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 9999;
+      cursor: pointer;
+      font-size: 24px;
+      user-select: none;
     }
+    body.light-theme .theme-toggle-icon { color: #000; }
     body.light-theme .btn-secondary {
       background: #e8e8e8;
       color: #000;
@@ -131,6 +137,10 @@
       margin: 0 auto;
       border-collapse: collapse;
       animation: fadeIn 0.5s ease;
+    }
+    body.light-theme .results-table {
+      background: #ffffff;
+      color: #000;
     }
     .results-table th, .results-table td {
       border: 1px solid var(--glass-border);
@@ -157,34 +167,7 @@
       color: #000;
     }
     .floating-elements {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
-    .floating-orb {
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,255,65,0.4) 0%, transparent 80%);
-      filter: blur(80px);
-      mix-blend-mode: screen;
-      opacity: 1;
-      animation: float 12s ease-in-out infinite;
-    }
-    body.light-theme .floating-orb {
-      background: radial-gradient(circle, rgba(0,136,255,0.4) 0%, transparent 80%);
-    }
-    .orb-1 {
-      top: 10%;
-      left: 20%;
-    }
-    .orb-2 {
-      top: 40%;
+@@ -188,129 +198,132 @@
       left: 70%;
       animation-duration: 14s;
     }
@@ -210,6 +193,9 @@
       z-index: -2;
       opacity: 0.4;
     }
+    body.light-theme .bg-canvas {
+      filter: invert(1);
+    }
     @media (max-width: 600px) {
       .glass-card { padding: 20px; }
       .title { font-size: 1.6rem; }
@@ -222,6 +208,7 @@
     <div class="floating-orb orb-2"></div>
     <div class="floating-orb orb-3"></div>
   </div>
+  <div class="theme-toggle-icon" title="Toggle theme">🌙</div>
   <canvas class="bg-canvas" id="bg-canvas"></canvas>
   <header class="header">
     <h1 class="title">CADE: Reverb Timing Calculator</h1>
@@ -242,7 +229,6 @@
       <div class="button-group">
         <button id="calculate" class="btn btn-primary">Calculate</button>
         <button id="reset" class="btn btn-secondary">Reset</button>
-        <button id="toggle-theme" class="btn btn-secondary" title="Toggle theme">🌗</button>
       </div>
       <table id="results" class="results-table" style="display:none;">
         <thead>
@@ -288,7 +274,7 @@
   const status = document.getElementById('status-indicator');
   const results = document.getElementById('results');
   const tbody = results.querySelector('tbody');
-  const themeBtn = document.getElementById('toggle-theme');
+  const themeIcon = document.querySelector('.theme-toggle-icon');
 
   async function loadPresets() {
     try {
@@ -314,16 +300,7 @@
       genreSelect.appendChild(opt);
     });
   }
-  function showStatus(msg, ok=true){
-    status.textContent = (ok ? '✨ ' : '❌ ') + msg;
-    status.style.background = ok ? 'rgba(0,255,65,0.1)' : 'rgba(255,0,0,0.2)';
-    status.style.opacity = 1;
-    setTimeout(()=>status.style.opacity=0, 2000);
-  }
-  function findPreset(genre, bpm){
-    const gData = Array.isArray(presets)
-      ? presets.find(p => p.genre === genre)
-      : presets[genre];
+@@ -327,59 +340,59 @@
     if(!gData) return null;
     const ranges = gData.bpm_ranges;
     if(Array.isArray(ranges)) {
@@ -349,7 +326,7 @@
     bpmInput.classList.remove('error');
     const preset = findPreset(genreSelect.value, bpm);
     if(!preset){
-      showStatus(`No match for ${genreSelect.value} @ ${bpm} BPM`, false);
+      showStatus('No data for selected BPM', false);
       results.style.display='none';
       return;
     }
@@ -379,7 +356,8 @@
     torus.material.color.set(isLight ? 0x222222 : 0x00ff41);
   }
   document.addEventListener('dblclick', toggleTheme);
-  themeBtn.addEventListener('click', toggleTheme);
+  themeIcon.addEventListener('click', toggleTheme);
 </script>
 </body>
+</html>
 </html>
