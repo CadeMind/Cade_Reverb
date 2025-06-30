@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CADEMIND Reverb Timing Calculator</title>
+<style>
+@font-face {
+  font-family: 'InterVar';
+  src: url('https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf') format('truetype');
+  font-weight: 100 900;
+}
+@font-face {
+  font-family: 'JetBrainsMono';
+  src: url('https://raw.githubusercontent.com/JetBrains/jetbrainsmono/master/fonts/ttf/JetBrainsMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+:root {
+  --primary: #00ff41;
+  --bg: #000000;
+  --text-primary: #00ff41;
+  --accent: #00ffff;
+}
+body.light-theme {
+  --primary: #00aaff;
+  --bg: #f0f0f0;
+  --text-primary: #111111;
+  --accent: #00aaff;
+}
+body {
+  margin:0;
+  font-family: 'InterVar', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  overflow:hidden;
+}
+#bg {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
+}
+.container {
+  max-width: 500px;
+  margin: 5vh auto;
+  padding: 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+label {
+  display:block;
+  margin-top:10px;
+}
+input, select, button {
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  background: rgba(0,0,0,0.2);
+  border:1px solid var(--accent);
+  color: var(--text-primary);
+  border-radius:8px;
+  font-family: 'JetBrainsMono', monospace;
+}
+button {
+  cursor:pointer;
+  background: var(--accent);
+  color:#fff;
+}
+.results-table {
+  margin-top:20px;
+  word-break:break-word;
+}
+.results-table div {
+  margin-bottom:10px;
+}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="container">
+  <h1>CADEMIND Reverb Calculator</h1>
+  <label>BPM
+    <input type="number" id="bpm" placeholder="Enter BPM (60-180)">
+  </label>
+  <label>Genre
+    <select id="genre"></select>
+  </label>
+  <button id="calc">Calculate</button>
+  <div class="results-table" id="results"></div>
+</div>
+<script src="https://raw.githubusercontent.com/mrdoob/three.js/r150/build/three.min.js"></script>
+<script>
+let presets = {};
+async function loadPresets(){
+  try {
+    const res = await fetch('https://raw.githubusercontent.com/CadeMind/Cade_Reverb/main/genre_presets.json');
+    presets = await res.json();
+    populateGenres();
+  } catch(e){
+    console.error('Failed to load presets', e);
+  }
+}
+function populateGenres(){
+  const select = document.getElementById('genre');
+  select.innerHTML = '<option value="">Select Genre</option>';
+  Object.keys(presets).forEach(g=>{
+    const opt = document.createElement('option');
+    opt.value = g;
+    opt.textContent = g;
+    select.appendChild(opt);
+  });
+}
+function findPreset(genre,bpm){
+  return presets[genre]?.bpm_ranges.find(({range})=>bpm>=range[0]&&bpm<=range[1])||null;
+}
+function displayResult(p){
+  const resDiv=document.getElementById('results');
+  if(!p){
+    resDiv.innerHTML = '<p>No preset found.</p>';
+    return;
+  }
+  resDiv.innerHTML = `<div><strong>Pre-delay:</strong> ${p.pre_delay}</div>
+  <div><strong>Decay Time:</strong> ${p.decay}</div>
+  <div><strong>Reverb Type:</strong> ${p.type}</div>
+  <div><strong>Tips:</strong><br>${p.tips.join('<br>')}</div>`;
+}
+function calculate(){
+  const bpm = parseInt(document.getElementById('bpm').value,10);
+  const genre = document.getElementById('genre').value;
+  if(!bpm||!genre)return;
+  const preset = findPreset(genre,bpm);
+  displayResult(preset);
+}
+function initEvents(){
+  document.getElementById('calc').addEventListener('click',calculate);
+  document.getElementById('bpm').addEventListener('keydown',e=>{if(e.key==='Enter')calculate();});
+  document.body.addEventListener('dblclick',()=>document.body.classList.toggle('light-theme'));
+}
+// three.js background
+function startBG(){
+  const canvas=document.getElementById('bg');
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true});
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  const geometry=new THREE.TorusGeometry(10,3,16,100);
+  const material=new THREE.MeshBasicMaterial({color:0x00ffff,wireframe:true});
+  const torus=new THREE.Mesh(geometry,material);
+  scene.add(torus);
+  camera.position.z=20;
+  function animate(){
+    requestAnimationFrame(animate);
+    torus.rotation.x+=0.01;
+    torus.rotation.y+=0.005;
+    renderer.render(scene,camera);
+  }
+  animate();
+  window.addEventListener('resize',()=>{
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  });
+}
+loadPresets();
+initEvents();
+startBG();
+</script>
+</body>
+</html>
