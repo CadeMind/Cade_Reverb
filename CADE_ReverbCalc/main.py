@@ -20,20 +20,28 @@ def apply_dark_theme():
     style.theme_use("clam")
     style.configure("TFrame", background="#000000")
     style.configure("TLabelframe", background="#000000", foreground="#00FF00")
-    style.configure("TLabelframe.Label", background="#000000", foreground="#00FF00")
+    style.configure(
+        "TLabelframe.Label", background="#000000", foreground="#00FF00"
+    )
     style.configure("TLabel", background="#000000", foreground="#00FF00")
     style.configure("TButton", background="#00FF00", foreground="#000000")
     style.configure("TEntry", fieldbackground="#111111", foreground="#00FF00")
-    style.configure("TCombobox", fieldbackground="#111111", foreground="#00FF00")
+    style.configure(
+        "TCombobox", fieldbackground="#111111", foreground="#00FF00"
+    )
     style.configure(
         "Treeview",
         background="#111111",
         fieldbackground="#111111",
         foreground="#00FF00",
     )
-    style.configure("Treeview.Heading", background="#000000", foreground="#00FF00")
+    style.configure(
+        "Treeview.Heading", background="#000000", foreground="#00FF00"
+    )
     if hasattr(app, "tips_text"):
-        app.tips_text.configure(bg="#000000", fg="#00FF00", insertbackground="#00FF00")
+        app.tips_text.configure(
+            bg="#000000", fg="#00FF00", insertbackground="#00FF00"
+        )
 
 
 def apply_light_theme():
@@ -47,20 +55,28 @@ def apply_light_theme():
     style.theme_use("clam")
     style.configure("TFrame", background="#FFFFFF")
     style.configure("TLabelframe", background="#FFFFFF", foreground="#000000")
-    style.configure("TLabelframe.Label", background="#FFFFFF", foreground="#000000")
+    style.configure(
+        "TLabelframe.Label", background="#FFFFFF", foreground="#000000"
+    )
     style.configure("TLabel", background="#FFFFFF", foreground="#000000")
     style.configure("TButton", background="#00FF00", foreground="#000000")
     style.configure("TEntry", fieldbackground="#EEEEEE", foreground="#000000")
-    style.configure("TCombobox", fieldbackground="#EEEEEE", foreground="#000000")
+    style.configure(
+        "TCombobox", fieldbackground="#EEEEEE", foreground="#000000"
+    )
     style.configure(
         "Treeview",
         background="#FFFFFF",
         fieldbackground="#FFFFFF",
         foreground="#000000",
     )
-    style.configure("Treeview.Heading", background="#FFFFFF", foreground="#000000")
+    style.configure(
+        "Treeview.Heading", background="#FFFFFF", foreground="#000000"
+    )
     if hasattr(app, "tips_text"):
-        app.tips_text.configure(bg="#FFFFFF", fg="#000000", insertbackground="#000000")
+        app.tips_text.configure(
+            bg="#FFFFFF", fg="#000000", insertbackground="#000000"
+        )
 
 
 def toggle_theme(event=None):
@@ -98,7 +114,7 @@ def load_presets() -> dict:
     return {}
 
 
-@@ -32,97 +102,109 @@ class ReverbApp(tk.Tk):
+class ReverbApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("CADE: Reverb Timing Calculator")
@@ -113,7 +129,9 @@ def load_presets() -> dict:
 
         ttk.Label(bpm_frame, text="BPM:").pack(side="left")
         self.bpm_var = tk.StringVar(value="120")
-        self.bpm_entry = ttk.Entry(bpm_frame, textvariable=self.bpm_var, width=7)
+        self.bpm_entry = ttk.Entry(
+            bpm_frame, textvariable=self.bpm_var, width=7
+        )
         self.bpm_entry.pack(side="left")
         self.bpm_entry.bind("<Return>", lambda _e: self.calculate())
 
@@ -125,12 +143,17 @@ def load_presets() -> dict:
         genres = sorted(self.presets.keys()) if self.presets else ["-"]
         self.genre_var = tk.StringVar(value=genres[0])
         self.genre_combo = ttk.Combobox(
-            genre_frame, textvariable=self.genre_var, values=genres, state="readonly"
+            genre_frame,
+            textvariable=self.genre_var,
+            values=genres,
+            state="readonly",
         )
         self.genre_combo.pack(side="left")
 
         # Calculate button
-        self.calc_btn = ttk.Button(self, text="Calculate", command=self.calculate)
+        self.calc_btn = ttk.Button(
+            self, text="Calculate", command=self.calculate
+        )
         self.calc_btn.pack(pady=5)
 
         # Delay table
@@ -149,7 +172,9 @@ def load_presets() -> dict:
         self.pre_delay_var = tk.StringVar()
         self.decay_var = tk.StringVar()
         self.type_var = tk.StringVar()
-        ttk.Label(info_frame, text="Pre-delay:").grid(row=0, column=0, sticky="w")
+        ttk.Label(info_frame, text="Pre-delay:").grid(
+            row=0, column=0, sticky="w"
+        )
         ttk.Label(info_frame, textvariable=self.pre_delay_var).grid(
             row=0, column=1, sticky="w"
         )
