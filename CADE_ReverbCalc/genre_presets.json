@@ -309,7 +309,7 @@
           "Соло-инструменты: chamber с ярким тоном"
         ]
       },
-      "91-120": {
+      ""91-120": {
         "pre_delay": "10–30 ms",
         "decay": "1.2–2.0 s",
         "type": "Hall",
@@ -320,6 +320,118 @@
           "Контрабасы: минимальный room",
           "Группы струнных: сбалансированный room",
           "Медные духовые: тёплый hall"
+        ]
+      }
+    }
+  },
+  "Ambient / Downtempo": {
+    "bpm_ranges": {
+      "60-64": {
+        "pre_delay": "40–60 ms",
+        "decay": "2.5–3.5 s",
+        "type": "Hall / Shimmer",
+        "tips": [
+          "Long shimmering tails for pads",
+          "Use reverse reverb on transitions",
+          "Automate wet/dry for evolving space",
+          "Stack halls with different EQ cuts",
+          "Sparse percussion benefits from gate"
+        ]
+      }
+    }
+  },
+  "Drum & Bass": {
+    "bpm_ranges": {
+      "170-174": {
+        "pre_delay": "5–15 ms",
+        "decay": "0.8–1.4 s",
+        "type": "Plate / Room",
+        "tips": [
+          "Snare hits often gated",
+          "Basslines usually dry to punch",
+          "FX sweeps with long tails",
+          "Sidechain reverb to kick",
+          "Layer plate and short room on leads"
+        ]
+      }
+    }
+  },
+  "Synthwave": {
+    "bpm_ranges": {
+      "90-94": {
+        "pre_delay": "25–35 ms",
+        "decay": "2.0–3.0 s",
+        "type": "Hall / Plate",
+        "tips": [
+          "Use gated snare reverb for retro feel",
+          "Lush hall on pads with shimmer",
+          "Automate pre-delay for build-ups",
+          "Wide plate on vocals",
+          "Delay before reverb on leads"
+        ]
+      }
+    }
+  },
+  "Afrobeat": {
+    "bpm_ranges": {
+      "100-104": {
+        "pre_delay": "20–40 ms",
+        "decay": "1.2–1.8 s",
+        "type": "Room / Hall",
+        "tips": [
+          "Percussion bus with tight room",
+          "Horn stabs benefit from short hall",
+          "Vocals often treated with plate",
+          "Use tempo-synced delays on guitars",
+          "Layer room and hall for depth"
+        ]
+      }
+    }
+  },
+  "Chillhop": {
+    "bpm_ranges": {
+      "70-74": {
+        "pre_delay": "30–50 ms",
+        "decay": "1.8–2.5 s",
+        "type": "Room / Plate",
+        "tips": [
+          "Vinyl crackle often kept dry",
+          "Sidechain reverb to snare",
+          "Automate decay in drops",
+          "Use spring verb on guitars",
+          "Subtle shimmer on keys"
+        ]
+      }
+    }
+  },
+  "Experimental": {
+    "bpm_ranges": {
+      "130-134": {
+        "pre_delay": "20–40 ms",
+        "decay": "1.0–2.0 s",
+        "type": "Chamber / FX",
+        "tips": [
+          "Creative automation on reverb filters",
+          "Grainy convolution spaces",
+          "Combine reverse and gated effects",
+          "Modulate pre-delay with LFO",
+          "Route noise layers into long hall"
+        ]
+      }
+    }
+  },
+  "Lo-Fi": {
+    "bpm_ranges": {
+      "80-84": {
+        "pre_delay": "15–30 ms",
+        "decay": "1.0–1.5 s",
+        "type": "Room",
+        "tips": [
+          "Tape saturation before reverb",
+          "Duck reverb with sidechain",
+          "Add subtle chorus to the tail",
+          "Keep kick mostly dry",
+          "Use short plate on snare"
         ]
       }
     }
