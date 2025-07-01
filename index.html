@@ -32,7 +32,7 @@
       overflow-x: hidden;
       position: relative;
     }
-@@ -95,65 +96,75 @@
+@@ -95,65 +96,91 @@
     input.error {
       border-color: var(--danger);
     }
@@ -61,13 +61,29 @@
     .theme-toggle-icon {
       position: fixed;
       top: 10px;
-      right: 10px;
-      z-index: 9999;
+      left: 10px;
+      border: 2px solid var(--text-primary);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
       cursor: pointer;
-      font-size: 24px;
+      background: transparent;
+      color: var(--text-primary);
+      z-index: 9999;
       user-select: none;
+      transition: transform 0.2s;
     }
-    body.light-theme .theme-toggle-icon { color: #000; }
+    .theme-toggle-icon:hover {
+      transform: scale(1.1);
+    }
+    body.light-theme .theme-toggle-icon {
+      color: #000;
+      border-color: #000;
+    }
     body.light-theme .btn-secondary {
       background: #e8e8e8;
       color: #000;
@@ -108,7 +124,7 @@
       color: #000;
     }
     .floating-elements {
-@@ -188,198 +199,202 @@
+@@ -188,198 +215,195 @@
       left: 70%;
       animation-duration: 14s;
     }
@@ -149,7 +165,7 @@
     <div class="floating-orb orb-2"></div>
     <div class="floating-orb orb-3"></div>
   </div>
-  <div class="theme-toggle-icon" title="Toggle theme">🌙</div>
+  <div class="theme-toggle-icon" title="Toggle theme">☾</div>
   <canvas class="bg-canvas" id="bg-canvas"></canvas>
   <header class="header">
     <h1 class="title">CADE: Reverb Timing Calculator</h1>
@@ -217,16 +233,9 @@
   const tbody = results.querySelector('tbody');
   const themeIcon = document.querySelector('.theme-toggle-icon');
 
-  async function loadPresets() {
-    try {
-      const res = await fetch('CADE_ReverbCalc/genre_presets.json');
-      if (!res.ok) throw new Error('Failed to fetch presets');
-      presets = await res.json();
-      showStatus('Presets loaded', true);
-    } catch (e) {
-      presets = window.PRESET_DATA || [];
-      showStatus('Loaded embedded presets', false);
-    }
+  function loadPresets() {
+    presets = window.PRESET_DATA || [];
+    showStatus('Presets loaded', true);
     getGenres();
   }
 
