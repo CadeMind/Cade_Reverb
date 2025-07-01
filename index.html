@@ -8,156 +8,206 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="presets.js"></script>
   <style>
-    :root {
-      --primary: #00ff41;
-      --secondary: #008f11;
-      --accent: #00ffff;
-      --warning: #ff6b35;
-      --danger: #ff073a;
-      --success: #39ff14;
-      --bg-dark: #000000;
-      --bg-darker: #0a0a0a;
-      --bg-card: #0d1117;
-      --text-primary: #00ff41;
-      --text-secondary: #4a9eff;
-      --text-muted: #7d8590;
-      --glass: rgba(0, 255, 65, 0.03);
-      --glass-border: rgba(0, 255, 65, 0.1);
-    }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(ellipse at center, #001100, #000000);
-      color: var(--text-primary);
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-@@ -95,65 +96,91 @@
-    input.error {
-      border-color: var(--danger);
-    }
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .btn {
-      flex: 1;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: #000;
-    }
-    .btn-secondary {
-      background: var(--bg-card);
-      color: var(--text-primary);
-      border: 1px solid var(--glass-border);
-    }
-    .theme-toggle-icon {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      border: 2px solid var(--text-primary);
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text-primary);
-      z-index: 9999;
-      user-select: none;
-      transition: transform 0.2s;
-    }
-    .theme-toggle-icon:hover {
-      transform: scale(1.1);
-    }
-    body.light-theme .theme-toggle-icon {
-      color: #000;
-      border-color: #000;
-    }
-    body.light-theme .btn-secondary {
-      background: #e8e8e8;
-      color: #000;
-      border-color: #ccc;
-    }
-    .results-table {
-      width: 100%;
-      margin: 0 auto;
-      border-collapse: collapse;
-      animation: fadeIn 0.5s ease;
-    }
-    body.light-theme .results-table {
-      background: #ffffff;
-      color: #000;
-    }
-    .results-table th, .results-table td {
-      border: 1px solid var(--glass-border);
-      padding: 8px 12px;
-      text-align: center;
-    }
-    .status-indicator {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 20px;
-      border-radius: 8px;
-      background: var(--bg-card);
-      color: var(--text-primary);
-      font-weight: 600;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 1000;
-      transition: opacity 0.3s;
-    }
-    body.light-theme .status-indicator {
-      background: #e0e0e0;
-      color: #000;
-    }
-    .floating-elements {
-@@ -188,198 +215,195 @@
-      left: 70%;
-      animation-duration: 14s;
-    }
-    .orb-3 {
-      top: 70%;
-      left: 30%;
-      animation-duration: 16s;
-    }
-    @keyframes float {
-      0%,100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-20px) scale(1.1); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .bg-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      opacity: 0.4;
-    }
-    body.light-theme .bg-canvas {
-      filter: invert(1);
-    }
-    @media (max-width: 600px) {
-      .glass-card { padding: 20px; }
-      .title { font-size: 1.6rem; }
-    }
-  </style>
+:root {
+  --primary: #00ff41;
+  --secondary: #008f11;
+  --accent: #00ffff;
+  --warning: #ff6b35;
+  --danger: #ff073a;
+  --success: #39ff14;
+  --bg-dark: #000000;
+  --bg-darker: #0a0a0a;
+  --bg-card: #0d1117;
+  --text-primary: #00ff41;
+  --text-secondary: #4a9eff;
+  --text-muted: #7d8590;
+  --glass: rgba(0, 255, 65, 0.03);
+  --glass-border: rgba(0, 255, 65, 0.1);
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: radial-gradient(ellipse at center, #001100, #000000);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+.header {
+  text-align: center;
+  margin-top: 40px;
+}
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0 0 20px 0;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 20px;
+}
+.glass-card {
+  max-width: 700px;
+  width: 100%;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px var(--glass-border);
+}
+.glass-card > *:not(:last-child) {
+  margin-bottom: 20px;
+}
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+}
+body.light-theme .input-group input,
+body.light-theme .input-group select {
+  background: #ffffff;
+  color: #000;
+  border-color: #ccc;
+}
+input.error {
+  border-color: var(--danger);
+}
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+.btn {
+  flex: 1;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #000;
+}
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+}
+body.light-theme .btn-secondary {
+  background: #e8e8e8;
+  color: #000;
+  border-color: #ccc;
+}
+.results-table {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  animation: fadeIn 0.5s ease;
+}
+body.light-theme .results-table {
+  background: #ffffff;
+  color: #000;
+}
+.results-table th,
+.results-table td {
+  border: 1px solid var(--glass-border);
+  padding: 8px 12px;
+  text-align: center;
+}
+.status-indicator {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+  transition: opacity 0.3s;
+}
+body.light-theme .status-indicator {
+  background: #e0e0e0;
+  color: #000;
+}
+.floating-elements {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+.floating-orb {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,65,0.4) 0%, transparent 80%);
+  filter: blur(80px);
+  mix-blend-mode: screen;
+  opacity: 1;
+  animation: float 12s ease-in-out infinite;
+}
+.orb-1 {
+  top: 10%;
+  left: 20%;
+}
+.orb-2 {
+  top: 40%;
+  left: 70%;
+  animation-duration: 14s;
+}
+.orb-3 {
+  top: 70%;
+  left: 30%;
+  animation-duration: 16s;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.1); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
+  opacity: 0.2;
+}
+body.light-theme .bg-canvas {
+  filter: invert(1);
+}
+@media (max-width: 600px) {
+  .glass-card { padding: 20px; }
+  .title { font-size: 1.6rem; }
+}
+</style>
 </head>
 <body>
   <div class="floating-elements">
@@ -208,11 +258,11 @@
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({canvas, alpha:true});
   renderer.setSize(window.innerWidth, window.innerHeight);
-  const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+  const geometry = new THREE.TorusGeometry(6, 1.5, 16, 100);
   const material = new THREE.MeshBasicMaterial({color: 0x00ff41, wireframe: true});
   const torus = new THREE.Mesh(geometry, material);
   scene.add(torus);
-  camera.position.z = 30;
+  camera.position.z = 50;
   function animate() {
     requestAnimationFrame(animate);
     torus.rotation.x += 0.005;
@@ -243,7 +293,12 @@
     const genreSet = Array.isArray(presets)
       ? new Set(presets.map(p => p.genre))
       : new Set(Object.keys(presets));
-    genreSelect.innerHTML = '<option disabled selected>Select Genre</option>';
+    genreSelect.innerHTML = "";
+    const placeholder = document.createElement("option");
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    placeholder.textContent = "Select Genre";
+    genreSelect.appendChild(placeholder);
     genreSet.forEach(g => {
       const opt = document.createElement('option');
       opt.textContent = g;
