@@ -198,10 +198,8 @@ body.light-theme .status-indicator {
   width: 100%;
   height: 100%;
   z-index: -3;
-  opacity: 0.2;
-}
-body.light-theme .bg-canvas {
-  filter: invert(1);
+  pacity: 0.2;
+  pointer-events: none;
 }
 @media (max-width: 600px) {
   .glass-card { padding: 20px; }
@@ -252,29 +250,56 @@ body.light-theme .bg-canvas {
   </div>
   <div id="status-indicator" class="status-indicator"></div>
 <script>
-  // Basic three.js animated background
-  const canvas = document.getElementById('bg-canvas');
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({canvas, alpha:true});
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  const geometry = new THREE.TorusGeometry(6, 1.5, 16, 100);
-  const material = new THREE.MeshBasicMaterial({color: 0x00ff41, wireframe: true});
-  const torus = new THREE.Mesh(geometry, material);
-  scene.add(torus);
-  camera.position.z = 50;
-  function animate() {
+  let scene, camera, renderer;
+  let bars = [];
+
+  function initVisualizer() {
+    const canvas = document.getElementById('bg-canvas');
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(document.body.classList.contains('light-theme') ? 0xffffff : 0x000000);
+
+    camera.position.z = 50;
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+    const point = new THREE.PointLight(0xffffff, 1);
+    point.position.set(25, 50, 25);
+    scene.add(ambient);
+    scene.add(point);
+
+    const radius = 20;
+    const geometry = new THREE.BoxGeometry(1, 8, 1);
+    for (let i = 0; i < 32; i++) {
+      const material = new THREE.MeshPhongMaterial({
+        color: document.body.classList.contains('light-theme') ? 0x333333 : 0xffffff
+      });
+      const bar = new THREE.Mesh(geometry, material);
+      const angle = (i / 32) * Math.PI * 2;
+      bar.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+      bars.push(bar);
+      scene.add(bar);
+    }
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
+
+  function animateBars(t) {
+    bars.forEach((bar, i) => {
+      bar.scale.y = 1.5 + Math.sin(t / 300 + i * 0.3) * 1.5;
+    });
+  }
+
+  function animate(time) {
     requestAnimationFrame(animate);
-    torus.rotation.x += 0.005;
-    torus.rotation.y += 0.007;
+    animateBars(time);
     renderer.render(scene, camera);
   }
-  animate();
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
   let presets = [];
   const bpmInput = document.getElementById('bpm');
   const genreSelect = document.getElementById('genre');
@@ -300,46 +325,7 @@ body.light-theme .bg-canvas {
     placeholder.textContent = "Select Genre";
     genreSelect.appendChild(placeholder);
     genreSet.forEach(g => {
-      const opt = document.createElement('option');
-      opt.textContent = g;
-      opt.value = g;
-      genreSelect.appendChild(opt);
-    });
-  }
-  function showStatus(msg, ok=true){
-    status.textContent = (ok ? '✨ ' : '❌ ') + msg;
-    status.style.background = ok ? 'rgba(0,255,65,0.1)' : 'rgba(255,0,0,0.2)';
-    status.style.opacity = 1;
-    setTimeout(()=>status.style.opacity=0, 2000);
-  }
-  function findPreset(genre, bpm){
-    const gData = Array.isArray(presets)
-      ? presets.find(p => p.genre === genre)
-      : presets[genre];
-    if(!gData) return null;
-    const ranges = gData.bpm_ranges;
-    if(Array.isArray(ranges)) {
-      for(const entry of ranges){
-        const [l, h] = entry.range;
-        if(bpm >= l && bpm <= h) return entry;
-      }
-    } else {
-      for(const r in ranges){
-        const [l,h] = r.split('-').map(Number);
-        if(bpm>=l && bpm<=h) return ranges[r];
-      }
-    }
-    return null;
-  }
-  document.getElementById('calculate').addEventListener('click', ()=>{
-    const bpm = parseInt(bpmInput.value,10);
-    if(isNaN(bpm) || bpm<60 || bpm>180){
-      bpmInput.classList.add('error');
-      showStatus('Invalid BPM', false);
-      return;
-    }
-    bpmInput.classList.remove('error');
-    const preset = findPreset(genreSelect.value, bpm);
+@@ -343,35 +368,41 @@ body.light-theme .bg-canvas {
     if(!preset){
       showStatus('No data for selected BPM', false);
       results.style.display='none';
@@ -365,10 +351,16 @@ body.light-theme .bg-canvas {
     results.style.display='none';
   });
 
-  window.addEventListener('DOMContentLoaded', loadPresets);
+  window.addEventListener('DOMContentLoaded', () => {
+    loadPresets();
+    initVisualizer();
+    animate();
+  });
+
   function toggleTheme(){
     const isLight = document.body.classList.toggle('light-theme');
-    torus.material.color.set(isLight ? 0x222222 : 0x00ff41);
+    bars.forEach(bar => bar.material.color.set(isLight ? 0x333333 : 0xffffff));
+    renderer.setClearColor(isLight ? 0xffffff : 0x000000);
   }
   document.addEventListener('dblclick', toggleTheme);
   themeIcon.addEventListener('click', toggleTheme);
